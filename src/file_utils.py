@@ -2,6 +2,8 @@
 
 import os
 import shutil
+import ntpath
+import time
 
 def _get_in_dir_path():
 
@@ -21,6 +23,35 @@ def _get_out_dir_path():
     out_dir_path = curr_path + '/out'
 
     return out_dir_path
+
+def get_output_file_path(source_file_path):
+
+    in_file_name = ntpath.basename(source_file_path)
+
+    current_time_str = time.gmtime()
+
+    print('current time string is :' + current_time_str)
+
+    output_file_path = in_file_name + current_time_str
+
+    print('Output file path is :' + output_file_path)
+
+    return output_file_path
+
+def get_file_list_from_in_dir():
+    count = 0;
+    for i in os.listdir(_get_in_dir_path()):
+        count = (count + 1)
+        print('# ', count, ' :' + i)
+
+    return
+
+
+def test_make_files():
+    open(_get_in_dir_path() + '/test_file_1.txt', 'w+', encoding='utf-8').close()
+    open(_get_in_dir_path() + '/test_file_2.txt', 'w+', encoding='utf-8').close()
+    open(_get_in_dir_path() + '/test_file_3.txt', 'w+', encoding='utf-8').close()
+    return
 
 
 def create_ou_dir():
@@ -56,5 +87,8 @@ def clean():
         shutil.rmtree(_get_out_dir_path())
 
 clean()
-create_ou_dir()
-create_out_dir()
+# create_ou_dir()
+# create_out_dir()
+# test_make_files()
+# get_output_file_path()
+# get_file_list_from_in_dir()
