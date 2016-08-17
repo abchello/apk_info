@@ -29,6 +29,10 @@ def get_file_path():
     return test_file_path
 
 def explain_html(path):
-    soup = BeautifulSoup(open(path, encoding='utf-8'))
+    soup = BeautifulSoup(open(path, encoding='utf-8'), 'html.parser')
+    print(soup.prettify(encoding='utf-8'))
+    # print(soup.td)
 
-get_file_path()
+    print(soup.td.contents)
+
+explain_html(get_file_path())
