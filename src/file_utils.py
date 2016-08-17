@@ -1,5 +1,5 @@
 #-*_coding:utf8-*-
-
+import inspect
 import os
 import shutil
 import ntpath
@@ -78,6 +78,17 @@ def create_out_dir():
     else:
         print('"out" folder exist')
 
+    return
+
+def test():
+
+    print('current path:' + curr_path)
+    print('pathsep :' + os.pathsep)
+    print('path.sep :' + os.path.sep)
+    print('os.sep :' + os.sep)
+
+    print(inspect.getfile(inspect.currentframe())) # script filename (usually with path)
+    print(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))) # script directory
     return
 
 def clean():
