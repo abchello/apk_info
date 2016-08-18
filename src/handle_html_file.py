@@ -3,6 +3,7 @@ import inspect
 import os
 import shutil
 from bs4 import BeautifulSoup
+import file_utils as fu
 
 #Get test file path
 def get_file_path():
@@ -107,10 +108,33 @@ def get_app_package_from_div_tag(div):
         # if class_value == 'main-info':
         #     print('find a main info')
 
+
+def write_text(text):
+    output_path = 'D:/Personal/Google Drive/Workspce/2016_Q1/Meizu/Coding/html/file/package_1_output.txt'
+    f = open(output_path, 'a', encoding='utf-8')
+    f.write(text)
+    f.write('\n')
+    f.close()
+    return
+
+APP_NAME_STR = 'name'
+APP_PACKAGE_STR = 'package'
+APP_PUBLISHER_STR = 'publisher'
+
+def dict_to_str(dict):
+    str = '' + dict[APP_NAME_STR] + dict[APP_PACKAGE_STR] + dict[APP_PUBLISHER_STR]
+    return str
+
 def explain_html(path):
     soup = BeautifulSoup(open(path, encoding='utf-8'), 'html.parser')
     # print(soup.prettify(encoding='utf-8'))
     # find TAG = td
+
+    dictlist_1 = []
+    dictlist_2 = []
+    dictlist_3 = []
+    dictlist_4 = []
+    dictlist_5 = []
     count = 0
     for tag_td in soup.find_all('td'):
         print('find a tag = td')
@@ -123,9 +147,36 @@ def explain_html(path):
         app_package = get_app_package_from_div_tag(tag_td_div_main_info)
 
         app_publisher = get_app_publisher_from_div_tag(tag_td_div_main_info)
-        count = count + 1
+
+        app_info_dict = {APP_NAME_STR: app_name, APP_PACKAGE_STR: app_package, APP_PUBLISHER_STR: app_publisher}
+
+        column = count%5
+        if column == 0:
+            dictlist_1.append(app_info_dict)
+        elif column == 1:
+            dictlist_2.append(app_info_dict)
+        elif column == 2:
+            dictlist_3.append(app_info_dict)
+        elif column == 3:
+            dictlist_4.append(app_info_dict)
+        elif column == 4:
+            dictlist_5.append(app_info_dict)
+
+        print('count :', count)
+        print('column :', column)
+
+        count += 1
         sep = '##'
-        print('----#' + str(count) + sep + app_name + sep + app_package + sep + app_publisher)
+        # print('----#' + str(count) + sep + app_name + sep + app_package + sep + app_publisher)
+        print('---#' + str(count) + str(app_info_dict))
+
+    for s_dict in dictlist_1:
+        line = dict_to_str(s_dict)
+        fu.write_text(fu.get_out_file_path('_1'), line)
+
+    print('------- END --------')
+    print('dictlist_1 length is :', len(dictlist_1))
+    print('dictlist_5 length is :', len(dictlist_5))
 
     # print(soup.td)
 

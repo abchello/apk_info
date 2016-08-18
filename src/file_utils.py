@@ -54,7 +54,7 @@ def test_make_files():
     return
 
 
-def create_ou_dir():
+def create_in_dir():
 
     in_dir_path = _get_in_dir_path()
 
@@ -80,15 +80,33 @@ def create_out_dir():
 
     return
 
+def _get_output_filename(name):
+    name = 'output_file_name'.join(name)
+    return name
+
+
+# the file full path
+def get_out_file_path(appen_text):
+    output_file_path = os.path.join(_get_out_dir_path(), _get_output_filename(appen_text))
+    print(output_file_path)
+    return output_file_path
+
+
+def write_text(output_path, text):
+    f = open(output_path, 'a', encoding='utf-8')
+    f.write(text)
+    f.write('\n')
+    f.close()
+
 def test():
 
-    print('current path:' + curr_path)
+    print('current path:' + os.getcwd())
     print('pathsep :' + os.pathsep)
     print('path.sep :' + os.path.sep)
     print('os.sep :' + os.sep)
 
-    print(inspect.getfile(inspect.currentframe())) # script filename (usually with path)
-    print(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))) # script directory
+    print(inspect.getfile(inspect.currentframe()))  # script filename (usually with path)
+    print(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))  # script directory
     return
 
 def clean():
