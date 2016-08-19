@@ -134,9 +134,9 @@ def explain_html(path):
     dictlist_1 = []
     dictlist_2 = []
     dictlist_3 = []
-    dictlist_4 = []
-    dictlist_5 = []
-    write_to_file_list = []
+    dictlist_4 = []  # [dict, dict, dict]
+    dictlist_5 = []  # [dict, dict, dict]
+    write_to_file_list = []  # [list, list, list]
     count = 0
     for tag_td in soup.find_all('td'):
         print('find a tag = td')
@@ -152,7 +152,7 @@ def explain_html(path):
 
         app_info_dict = {APP_NAME_STR: app_name, APP_PACKAGE_STR: app_package, APP_PUBLISHER_STR: app_publisher}
 
-        column = count%5
+        column = count % 5
         if column == 0:
             dictlist_1.append(app_info_dict)
         elif column == 1:
