@@ -94,6 +94,10 @@ def get_out_file_path(appen_text):
     print('write file path -->', path)
     return path
 
+# get path
+def get_print_file_path(file_name):
+    return (_get_out_dir_path() + os.path.sep + file_name)
+
 
 def write_text(output_path, text):
     f = open(output_path, 'a', encoding='utf-8')

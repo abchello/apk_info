@@ -39,7 +39,7 @@ def write_text(text):
     f.close()
 
 # D:\Personal\Google Drive\Workspce\2016_Q1\Meizu\Coding\html\file
-f = open('D:/Personal/Google Drive/Workspce/2016_Q1/Meizu/Coding/html/file/package_1.txt',encoding='utf-8')
+f = open('D:/Personal/Google Drive/Workspce/2016_Q1/Meizu/Coding/html/file/package_1.txt', encoding='utf-8')
 i = 1;
 while 1:
     print( '#', i )

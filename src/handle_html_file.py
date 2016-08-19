@@ -146,18 +146,12 @@ def get_app_package_from_div_tag(div):
         # if class_value == 'main-info':
         #     print('find a main info')
 
-
-def write_text(text):
-    output_path = 'D:/Personal/Google Drive/Workspce/2016_Q1/Meizu/Coding/html/file/package_1_output.txt'
-    f = open(output_path, 'a', encoding='utf-8')
-    f.write(text)
-    f.write('\n')
-    f.close()
-    return
-
 APP_NAME_STR = 'name'
 APP_PACKAGE_STR = 'package'
 APP_PUBLISHER_STR = 'publisher'
+
+CHART_INFO_COUNTRY = 'COUNTRY'
+CHART_INFO_DATE = 'DATE'
 
 def dict_to_str(dict):
     sep = '##'
@@ -169,8 +163,14 @@ def explain_html(path):
     # print(soup.prettify(encoding='utf-8'))
     # find TAG = td
 
-    print(get_chart_info_date(get_chart_info_tag(soup)))
-    print(get_chart_info_country(get_chart_info_tag(soup)))
+    tag = get_chart_info_tag(soup);
+    country = get_chart_info_country(tag)
+    date = get_chart_info_date(tag)
+    print(country)
+    print(date)
+
+    fu.get_print_file_path((country.join(date)))
+    return
 
     dictlist_1 = []
     dictlist_2 = []
