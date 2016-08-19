@@ -30,6 +30,44 @@ def get_file_path():
     print('the file path :' + test_file_path)
     return test_file_path
 
+
+def get_chart_info_tag(soup):
+    tag = None
+    if soup is not None:
+        tag_h3 = soup.find('h3', attrs={'class': 'dashboard-sub-header'})
+        if tag_h3 is not None:
+            tag = tag_h3
+    return tag
+
+
+def get_chart_info_country(tag_h3):
+
+    country = 'UNKNOWN_COUNTRY'
+    # print(tag_h3)
+
+    if tag_h3 is not None:
+        s = tag_h3.contents[0]
+        if s is not None and s != '':
+            country = s
+    return country
+
+def get_chart_info_date(tag):
+
+    date = 'UNKNOWN_DATE'
+
+    if tag is not None:
+        span = tag.span
+        if span is not None:
+            sub_span = span.span
+            if sub_span is not None:
+                s = sub_span.string
+                if s is not None and s != '':
+                    date = s
+    return date
+
+
+
+
 def get_app_name_from_div_tag(div):
     # Default value
     info_app_name = 'NULL_APP_NAME'
@@ -131,6 +169,9 @@ def explain_html(path):
     # print(soup.prettify(encoding='utf-8'))
     # find TAG = td
 
+    print(get_chart_info_date(get_chart_info_tag(soup)))
+    print(get_chart_info_country(get_chart_info_tag(soup)))
+
     dictlist_1 = []
     dictlist_2 = []
     dictlist_3 = []
@@ -196,6 +237,6 @@ def explain_html(path):
     # print(soup.td)
 
     # print(soup.td.contents)
-fu.clean()
-fu.create_out_dir()
+# fu.clean()
+# fu.create_out_dir()
 explain_html(get_file_path())
