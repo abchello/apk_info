@@ -80,16 +80,19 @@ def create_out_dir():
 
     return
 
-def _get_output_filename(name):
-    name = 'output_file_name'.join(name)
+def _get_output_filename(text):
+    name = 'output_file_name'.join(text)
+    print('file name :', name)
     return name
 
 
 # the file full path
 def get_out_file_path(appen_text):
-    output_file_path = os.path.join(_get_out_dir_path(), _get_output_filename(appen_text))
-    print(output_file_path)
-    return output_file_path
+    dir_path = _get_out_dir_path()
+    file_name = 'output_file_' + appen_text + '.txt'
+    path = dir_path + os.path.sep + file_name
+    print('write file path -->', path)
+    return path
 
 
 def write_text(output_path, text):

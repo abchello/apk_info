@@ -122,7 +122,8 @@ APP_PACKAGE_STR = 'package'
 APP_PUBLISHER_STR = 'publisher'
 
 def dict_to_str(dict):
-    str = '' + dict[APP_NAME_STR] + dict[APP_PACKAGE_STR] + dict[APP_PUBLISHER_STR]
+    sep = '##'
+    str = '' + dict[APP_NAME_STR] + sep + dict[APP_PACKAGE_STR] + sep + dict[APP_PUBLISHER_STR]
     return str
 
 def explain_html(path):
@@ -135,6 +136,7 @@ def explain_html(path):
     dictlist_3 = []
     dictlist_4 = []
     dictlist_5 = []
+    write_to_file_list = []
     count = 0
     for tag_td in soup.find_all('td'):
         print('find a tag = td')
@@ -163,16 +165,29 @@ def explain_html(path):
             dictlist_5.append(app_info_dict)
 
         print('count :', count)
-        print('column :', column)
+        print('column :', column + 1)
 
         count += 1
         sep = '##'
         # print('----#' + str(count) + sep + app_name + sep + app_package + sep + app_publisher)
         print('---#' + str(count) + str(app_info_dict))
 
-    for s_dict in dictlist_1:
-        line = dict_to_str(s_dict)
-        fu.write_text(fu.get_out_file_path('_1'), line)
+    # init the list of write to file
+    write_to_file_list.append(dictlist_1)
+    write_to_file_list.append(dictlist_2)
+    write_to_file_list.append(dictlist_3)
+    write_to_file_list.append(dictlist_4)
+    write_to_file_list.append(dictlist_5)
+
+    for i in range(len(write_to_file_list)):
+        # write the dict to file
+        list = write_to_file_list[i]
+        for s_dict in list:
+            line = dict_to_str(s_dict)
+            print('write-->line:', line)
+            path = fu.get_out_file_path(str(i))
+            fu.write_text(path, line)
+
 
     print('------- END --------')
     print('dictlist_1 length is :', len(dictlist_1))
@@ -181,5 +196,6 @@ def explain_html(path):
     # print(soup.td)
 
     # print(soup.td.contents)
-
+fu.clean()
+fu.create_out_dir()
 explain_html(get_file_path())
