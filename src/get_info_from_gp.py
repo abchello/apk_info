@@ -1,6 +1,7 @@
 #-*_coding:utf8-*-
 import requests
 from bs4 import BeautifulSoup
+import time
 
 
 def get_link(packagename):
@@ -12,10 +13,8 @@ def get_link(packagename):
 
 def get_soup(link):
     link = link.strip('\n')
+    soup = None
     response = requests.get(link)
-
-    print('response status code',response.status_code)
-    # print('get link:' + link)
     soup = BeautifulSoup(response.text, "html.parser")
     return soup
 
@@ -87,14 +86,23 @@ def get_sys(tag):
 
 def get_detail_tag(soup):
 
-    tag_detial_content = soup.find('div', attrs={'class': 'details-section metadata'})
+    tag_detial_content = None
+    if soup is not None:
+        tag_detial_content = soup.find('div', attrs={'class': 'details-section metadata'})
 
     return tag_detial_content
 
 def test():
-    link = 'com.google.android.apps.giant'
-    print(get_link(link))
-    soup = get_soup(get_link(link))
+    package = 'com.google.android.apps.giant'
+    print(get_link(package))
+
+    soup = None
+
+    link = get_link(package)
+    try:
+        soup = get_soup(link)
+    except:
+        print('catch error')
 
     # get category
     print('-- category', get_category(soup))
