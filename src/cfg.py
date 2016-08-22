@@ -39,4 +39,12 @@ def get_master_key():
         read_key()
     return key_set[KEY_MASTERKEY]
 
-read_key()
+def write_cfg_file():
+    cfg_fname = os.path.join(os.getcwd(), CFG_F_NAME)
+    if os.path.isfile(cfg_fname):
+        return
+    cfg = {KEY_APPID: '', KEY_APPKEY: '', KEY_MASTERKEY: ''}
+    with open(cfg_fname, 'w') as f:
+        json.dump(cfg, f)
+
+

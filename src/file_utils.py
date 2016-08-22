@@ -122,8 +122,8 @@ def clean():
     if os.path.exists(_get_out_dir_path()):
         shutil.rmtree(_get_out_dir_path())
 
-clean()
-# create_ou_dir()
+# clean()
+# create_in_dir()
 # create_out_dir()
 # test_make_files()
 # get_output_file_path()

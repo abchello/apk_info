@@ -170,7 +170,6 @@ def explain_html(path):
     print(date)
 
     fu.get_print_file_path((country.join(date)))
-    return
 
     dictlist_1 = []
     dictlist_2 = []
@@ -224,7 +223,8 @@ def explain_html(path):
         # write the dict to file
         list = write_to_file_list[i]
         for s_dict in list:
-            line = dict_to_str(s_dict)
+            # line = dict_to_str(s_dict)
+            line = s_dict[APP_PACKAGE_STR]
             print('write-->line:', line)
             path = fu.get_out_file_path(str(i))
             fu.write_text(path, line)

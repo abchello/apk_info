@@ -1,6 +1,8 @@
 #-*_coding:utf8-*-
 import requests
 from bs4 import BeautifulSoup
+import os
+import file_utils as fu
 import time
 
 
@@ -125,4 +127,5 @@ def test():
 
     return
 
-test()
+
+# test()
