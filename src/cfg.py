@@ -25,19 +25,16 @@ def read_key():
     return key
 
 def get_app_key():
-    if key_set is None:
-        read_key()
     return read_key()[KEY_APPKEY]
 
+
 def get_app_id():
-    if key_set is None:
-        read_key()
     return read_key()[KEY_APPID]
 
+
 def get_master_key():
-    if key_set is None:
-        read_key()
     return key_set[KEY_MASTERKEY]
+
 
 def write_cfg_file():
     cfg_fname = os.path.join(os.getcwd(), CFG_F_NAME)
