@@ -11,7 +11,11 @@ FIELD_INSTALLS = 'installs'
 #FIELD_PROVIDER = 'provider'
 FIELD_PRICE = 'price'
 FIELD_OFFERED = 'offered'
+FIELD_ANDROID = 'android'
 
+
+# class AppInfo(leancloud.Object):
+#     pass
 
 class DBBase(object):
 
@@ -25,24 +29,27 @@ class AppInfoHelper(DBBase):
 
     # super.form_name = FORM_NAME
 
-    AppInfo = leancloud.Object()
+    # AppInfo = leancloud.Object.extend(FORM_NAME)
 
     def __init__(self):
-        AppInfo = leancloud.Object.extend(FORM_NAME)
+        super().initialize_sdk()
+        self.AppInfo = leancloud.Object.extend(FORM_NAME)
         print('AppInfoHelper init() --called')
 
     def add_or_update(self, package, name, category, size, price, installs, offered):
+        appinfo = None
         query = self.AppInfo.query
         query_list = query.equal_to(FIELD_PACKAGE, package).find()
-        appinfo = None
-        if query_list.count() > 0:
+        if len(query_list) > 0:
             id = query_list[0].id
             appinfo = self.AppInfo.create_without_data(id)
+            print('update ID-->', id)
         else:
             appinfo = self.AppInfo()
             appinfo.set(FIELD_PACKAGE, package)
+            print('add    ID-->', appinfo.id)
 
-        appinfo.set(FORM_NAME, name)
+        appinfo.set(FIELD_NAME, name)
         appinfo.set(FIELD_CATEGORY, category)
         appinfo.set(FIELD_PRICE, price)
         appinfo.set(FIELD_SIZE, size)

@@ -2,7 +2,7 @@
 import file_utils as fu
 import os
 import get_info_from_gp as ai
-import db.db_appinfo as appinfo
+import db.db_appinfo as afh
 
 CSV_SEP = '#'
 RETURN_STR = '\n'
@@ -75,6 +75,8 @@ def output_line_by(package):
     return out_str
 
 def do_test():
-    appinfo.AppInfoHelper.add_or_update('','cc.blabla.aa','hello', 'Business', '21M', 'HK23.9', '100000', 'Nicholas')
+
+    appinfohelper = afh.AppInfoHelper()
+    appinfohelper.add_or_update('com.kingsoft.bb', 'hello version4', 'Business', '21M', 'HK23.9', '100000', 'Nicholas')
 
 do_test()
