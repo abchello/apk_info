@@ -10,12 +10,13 @@ def do():
     db_helper = afh.AppInfoHelper()
 
     list = db_helper.query()
-    return
     print(list)
     for inf in list:
-        print(inf.id)
-        print(inf[cons.FIELD_PACKAGE])
+        package = inf.get(cons.FIELD_PACKAGE)
+        new_pkg = afh.trim_package(package)
+        inf.set(cons.FIELD_PACKAGE, new_pkg)
+        inf.save()
 
-    print(list.count())
+    # print(list.count())
 
 do()

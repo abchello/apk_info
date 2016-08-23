@@ -29,6 +29,11 @@ class AppInfoHelper(DBBase):
                            dect[cons.FIELD_CATEGORY], dect[cons.FIELD_SIZE],
                            dect[cons.FIELD_PRICE], dect[cons.FIELD_INSTALLS],
                            dect[cons.FIELD_OFFERED], dect[cons.FIELD_ANDROID])
+    def update_value(self, id, key, value):
+
+        appinfo = self.AppInfo.create_without_data(id)
+        appinfo.set(key, value)
+        appinfo.save()
 
     def add_or_update(self, package, name, category, size, price, installs, offered, android):
         appinfo = None
@@ -72,19 +77,20 @@ class AppInfoHelper(DBBase):
         query = self.AppInfo.query
         query.select(cons.FIELD_PACKAGE)
         query.limit(100)
+        query.skip(100)
         query_list = query.find()
 
-        for ob in query_list:
-            self.AppInfo(ob)
-            print(ob.id)
-            print(ob[cons.FIELD_PACKAGE])
         return query_list
 
-class printer(object):
 
-    def print_a(self):
-        print('printA')
-
-    def print_b(self, str):
-        print('printB', str)
+RETURN_STR = '\n'
+def trim_package(package):
+    # delete start and end whitespace
+    package = package.strip()
+    # delete return sep string
+    package = package.replace(RETURN_STR, '')
+    # delete whitespace
+    package = package.replace(' ', '')
+    print(package)
+    return package
 

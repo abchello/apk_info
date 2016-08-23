@@ -18,7 +18,7 @@ def do():
     while 1:
         print('#', i)
         package = f.readline()
-        package = package.replace(RETURN_STR, '')
+        package = afh.trim_package(package)
         if not package:
             break
 
