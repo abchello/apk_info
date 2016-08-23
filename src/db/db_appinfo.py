@@ -21,6 +21,8 @@ class AppInfoHelper(DBBase):
         self.AppInfo = leancloud.Object.extend(cons.FORM_NAME)
         print('AppInfoHelper init() --called')
 
+    def add_or_update(self, ob):
+        ob.id
 
     def and_or_update_by(self, dect):
         return self.add_or_update(dect[cons.FIELD_PACKAGE], dect[cons.FIELD_NAME],
@@ -65,6 +67,18 @@ class AppInfoHelper(DBBase):
         appinfo.save()
 
         return appinfo
+
+    def query(self):
+        query = self.AppInfo.query
+        query.select(cons.FIELD_PACKAGE)
+        query.limit(100)
+        query_list = query.find()
+
+        for ob in query_list:
+            self.AppInfo(ob)
+            print(ob.id)
+            print(ob[cons.FIELD_PACKAGE])
+        return query_list
 
 class printer(object):
 
