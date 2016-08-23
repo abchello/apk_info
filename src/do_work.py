@@ -77,6 +77,11 @@ def output_line_by(package):
 def do_test():
 
     appinfohelper = afh.AppInfoHelper()
-    appinfohelper.add_or_update('com.kingsoft.bb', 'hello version4', 'Business', '21M', 'HK23.9', '100000', 'Nicholas')
+    # appinfohelper.and_or_update_by('')
+    # appinfohelper.add_or_update('com.kingsoft.bb', 'hello version4', 'Business', '21M', 'HK23.9', '100000', 'Nicholas')
+
+    p = afh.printer()
+    p.print_a()
+    p.print_b('aa')
 
 do_test()

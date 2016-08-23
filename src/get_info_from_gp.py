@@ -1,10 +1,7 @@
 #-*_coding:utf8-*-
 import requests
 from bs4 import BeautifulSoup
-import os
-import file_utils as fu
-import time
-
+import constants as cons
 
 def get_link(packagename):
     l_cn = '&hl=zh_CN'
@@ -21,7 +18,7 @@ def get_soup(link):
     return soup
 
 def get_category(soup):
-    category = 'NULL_CATEGORY'
+    category = ''
     if soup is not None:
         tag_a = soup.find('a', attrs={'class': 'document-subtitle category'})
         if tag_a is not None:
@@ -31,7 +28,7 @@ def get_category(soup):
     return category
 
 def get_name(soup):
-    name = 'NULL_NAME'
+    name = ''
     if soup is not None:
         tag = soup.find('div', attrs={'class': 'id-app-title'})
         if tag is not None:
@@ -41,7 +38,7 @@ def get_name(soup):
     return name
 
 def get_price(soup):
-    price = 'NULL_PRICE'
+    price = ''
 
     if soup is not None:
         tag = soup.find('button', attrs={'class': 'price buy id-track-click id-track-impression'})
@@ -56,7 +53,7 @@ def get_price(soup):
 
 def get_size(tag):
 
-    size = 'NULL_SIZE'
+    size = ''
     if tag is not None:
         tag_size = tag.find('div', attrs={'itemprop': 'fileSize'})
         if tag_size is not None:
@@ -66,7 +63,7 @@ def get_size(tag):
     return size
 
 def get_installs(tag):
-    installs = 'NULL_INSTALLS'
+    installs = ''
     if tag is not None:
         tag_download = tag.find('div', attrs={'itemprop': 'numDownloads'})
         if tag_download is not None:
@@ -76,7 +73,7 @@ def get_installs(tag):
     return installs
 
 def get_sys(tag):
-    android = 'NULL_ANDROID'
+    android = ''
     if tag is not None:
         tag_sys = tag.find('div', attrs={'itemprop': 'operatingSystems'})
         if tag_sys is not None:
@@ -94,38 +91,63 @@ def get_detail_tag(soup):
 
     return tag_detial_content
 
-def test():
-    package = 'com.google.android.apps.giant'
-    print(get_link(package))
+
+def delete_whitespace_from_start_end(s):
+    str = ''
+    if s is not None:
+        str = s.lstrip().rstrip()
+    return str
+
+def get_app_info(package):
 
     soup = None
 
     link = get_link(package)
+    print(link)
     try:
         soup = get_soup(link)
     except:
         print('catch error')
 
     # get category
-    print('-- category', get_category(soup))
+    cagegory = delete_whitespace_from_start_end(get_category(soup))
+    print('-- category', cagegory)
 
     details = get_detail_tag(soup)
 
     # get size
-    print('-- size', get_size(details))
+    size = delete_whitespace_from_start_end(get_size(details))
+    print('-- size', size)
 
     # get name
-    print('-- name', get_name(soup))
+    name = get_name(soup)
+    print('-- name', name)
 
     # get installs
-    print('-- installs', get_installs(details))
+    installs = delete_whitespace_from_start_end(get_installs(details))
+    print('-- installs', installs)
 
     # get Android version
-    print('-- android', get_sys(details))
+    androidv = delete_whitespace_from_start_end(get_sys(details))
+    print('-- android', androidv)
 
-    print('-- price', get_price(soup))
+    # get price
+    price = delete_whitespace_from_start_end(get_price(soup))
+    print('-- price', price)
 
-    return
+    # get category
+    print('-- category', get_category(soup))
 
+    # get offered by
+    offered = ''
 
-# test()
+    dict = {cons.FIELD_PACKAGE: package,
+            cons.FIELD_NAME: name,
+            cons.FIELD_SIZE: size,
+            cons.FIELD_CATEGORY: cagegory,
+            cons.FIELD_PRICE: price,
+            cons.FIELD_INSTALLS: installs,
+            cons.FIELD_ANDROID: androidv,
+            cons.FIELD_OFFERED: offered}
+
+    return dict
