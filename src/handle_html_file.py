@@ -4,6 +4,8 @@ import os
 import shutil
 from bs4 import BeautifulSoup
 import file_utils as fu
+import constants as cons
+from datetime import datetime
 
 #Get test file path
 def get_file_path():
@@ -66,7 +68,10 @@ def get_chart_info_date(tag):
     return date
 
 
-
+def gentlate_rank_dict(package, rank, rank_type, date, name, publisher=''):
+    return {cons.FIELD_PACKAGE: package, cons.KEY_RANK: rank,
+            cons.KEY_RANK_TYPE: rank_type, cons.KEY_DATE: date,
+            cons.FIELD_NAME: name, cons.FIELD_OFFERED: publisher}
 
 def get_app_name_from_div_tag(div):
     # Default value
@@ -146,17 +151,17 @@ def get_app_package_from_div_tag(div):
         # if class_value == 'main-info':
         #     print('find a main info')
 
-APP_NAME_STR = 'name'
-APP_PACKAGE_STR = 'package'
-APP_PUBLISHER_STR = 'publisher'
-
-CHART_INFO_COUNTRY = 'COUNTRY'
-CHART_INFO_DATE = 'DATE'
-
 def dict_to_str(dict):
-    sep = '##'
-    str = '' + dict[APP_NAME_STR] + sep + dict[APP_PACKAGE_STR] + sep + dict[APP_PUBLISHER_STR]
+    sep = '#'
+    str = '' + dict[cons.FIELD_NAME] + sep + dict[cons.FIELD_PACKAGE] + sep + dict[cons.FIELD_OFFERED]
     return str
+
+def get_data(data_str):
+    date = datetime.today()
+    if data_str is not None:
+        pass
+    return date
+
 
 def explain_html(path):
     soup = BeautifulSoup(open(path, encoding='utf-8'), 'html.parser')
@@ -177,6 +182,7 @@ def explain_html(path):
     dictlist_4 = []  # [dict, dict, dict]
     dictlist_5 = []  # [dict, dict, dict]
     write_to_file_list = []  # [list, list, list]
+    rank = 1
     count = 0
     for tag_td in soup.find_all('td'):
         print('find a tag = td')
@@ -190,19 +196,42 @@ def explain_html(path):
 
         app_publisher = get_app_publisher_from_div_tag(tag_td_div_main_info)
 
-        app_info_dict = {APP_NAME_STR: app_name, APP_PACKAGE_STR: app_package, APP_PUBLISHER_STR: app_publisher}
+        if len(dictlist_1) == 0 and app_package == 'NULL_APP_PACKAGE':
+            print('Null td')
+        else:
+            column = count % 5
+            if column == 0:
+                rank = len(dictlist_1) + 1
+                app_info_dict = gentlate_rank_dict(app_package, rank,
+                                                    cons.VALUE_RANK_TYPE_FREE, datetime(2016, 8, 1),
+                                                    app_name, app_publisher)
+                dictlist_1.append(app_info_dict)
+            elif column == 1:
+                rank = len(dictlist_2) + 1
+                app_info_dict = gentlate_rank_dict(app_package, rank,
+                                                   cons.VALUE_RANK_TYPE_PAID, datetime(2016, 8, 1),
+                                                   app_name, app_publisher)
+                dictlist_2.append(app_info_dict)
+            elif column == 2:
+                rank = len(dictlist_3) + 1
+                app_info_dict = gentlate_rank_dict(app_package, rank,
+                                                   cons.VALUE_RANK_TYPE_GROSSING, datetime(2016, 8, 1),
+                                                   app_name, app_publisher)
+                dictlist_3.append(app_info_dict)
+            elif column == 3:
+                rank = len(dictlist_4) + 1
+                app_info_dict = gentlate_rank_dict(app_package, rank,
+                                                   cons.VALUE_RANK_TYPE_NEWFREE, datetime(2016, 8, 1),
+                                                   app_name, app_publisher)
+                dictlist_4.append(app_info_dict)
+            elif column == 4:
+                rank = len(dictlist_5) + 1
+                app_info_dict = gentlate_rank_dict(app_package, rank,
+                                                   cons.VALUE_RANK_TYPE_NEWPAID, datetime(2016, 8, 1),
+                                                   app_name, app_publisher)
+                dictlist_5.append(app_info_dict)
 
-        column = count % 5
-        if column == 0:
-            dictlist_1.append(app_info_dict)
-        elif column == 1:
-            dictlist_2.append(app_info_dict)
-        elif column == 2:
-            dictlist_3.append(app_info_dict)
-        elif column == 3:
-            dictlist_4.append(app_info_dict)
-        elif column == 4:
-            dictlist_5.append(app_info_dict)
+
 
         print('count :', count)
         print('column :', column + 1)
@@ -211,6 +240,8 @@ def explain_html(path):
         sep = '##'
         # print('----#' + str(count) + sep + app_name + sep + app_package + sep + app_publisher)
         print('---#' + str(count) + str(app_info_dict))
+
+    return
 
     # init the list of write to file
     write_to_file_list.append(dictlist_1)
@@ -224,7 +255,7 @@ def explain_html(path):
         list = write_to_file_list[i]
         for s_dict in list:
             # line = dict_to_str(s_dict)
-            line = s_dict[APP_PACKAGE_STR]
+            line = s_dict[cons.FIELD_PACKAGE]
             print('write-->line:', line)
             path = fu.get_out_file_path(str(i))
             fu.write_text(path, line)

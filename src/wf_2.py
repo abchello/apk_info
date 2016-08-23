@@ -11,11 +11,14 @@ def do():
 
     list = db_helper.query()
     print(list)
+    i = 0
     for inf in list:
+        print('#', i)
         package = inf.get(cons.FIELD_PACKAGE)
         new_pkg = afh.trim_package(package)
         inf.set(cons.FIELD_PACKAGE, new_pkg)
         inf.save()
+        i += 1
 
     # print(list.count())
 

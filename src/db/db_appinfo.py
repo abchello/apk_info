@@ -76,8 +76,8 @@ class AppInfoHelper(DBBase):
     def query(self):
         query = self.AppInfo.query
         query.select(cons.FIELD_PACKAGE)
-        query.limit(100)
-        query.skip(100)
+        query.limit(10)
+        query.skip(800)
         query_list = query.find()
 
         return query_list
