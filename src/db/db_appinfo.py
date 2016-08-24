@@ -84,68 +84,49 @@ class AppInfoHelper(DBBase):
 
 class RankUSHelper(DBBase):
 
-
-    # AppInfo = leancloud.Object.extend(FORM_NAME)
-
     def __init__(self):
         super().initialize_sdk()
-        self.AppInfo = leancloud.Object.extend(cons.FORM_APPINFO)
+        self.RankUS = leancloud.Object.extend(cons.FORM_RANK_US)
         print('AppInfoHelper init() --called')
 
-    def add_or_update(self, ob):
-        ob.id
-
     def and_or_update_by(self, dect):
-        return self.add_or_update(dect[cons.FIELD_PACKAGE], dect[cons.FIELD_NAME],
-                           dect[cons.FIELD_CATEGORY], dect[cons.FIELD_SIZE],
-                           dect[cons.FIELD_PRICE], dect[cons.FIELD_INSTALLS],
-                           dect[cons.FIELD_OFFERED], dect[cons.FIELD_ANDROID])
+        return self.add_or_update(dect[cons.FIELD_PACKAGE], dect[cons.KEY_RANK],
+                           dect[cons.KEY_RANK_TYPE], dect[cons.KEY_DATE])
     def update_value(self, id, key, value):
 
-        appinfo = self.AppInfo.create_without_data(id)
+        appinfo = self.RankUS.create_without_data(id)
         appinfo.set(key, value)
         appinfo.save()
 
-    def add_or_update(self, package, name, category, size, price, installs, offered, android):
-        appinfo = None
-        query = self.AppInfo.query
+    def add_or_update(self, package, rank, rank_type, date):
+        rankus = None
+        query = self.RankUS.query
         query_list = query.equal_to(cons.FIELD_PACKAGE, package).find()
         if len(query_list) > 0:
             id = query_list[0].id
-            appinfo = self.AppInfo.create_without_data(id)
+            rankus = self.RankUS.create_without_data(id)
             print('update ID-->', id)
         else:
-            appinfo = self.AppInfo()
-            appinfo.set(cons.FIELD_PACKAGE, package)
-            print('add    ID-->', appinfo.id)
+            rankus = self.RankUS()
+            rankus.set(cons.FIELD_PACKAGE, package)
+            print('add    ID-->', rankus.id)
 
-        if name is not None and name != '':
-            appinfo.set(cons.FIELD_NAME, name)
+        # rank value is int
+        rankus.set(cons.KEY_RANK, rank)
 
-        if category is not None and category != '':
-            appinfo.set(cons.FIELD_CATEGORY, category)
+        # rank type value type is int
+        rankus.set(cons.KEY_RANK_TYPE, rank_type)
 
-        if price is not None and price != '':
-            appinfo.set(cons.FIELD_PRICE, price)
+        # date
+        if date is not None:
+            rankus.set(cons.KEY_DATE, date)
 
-        if size is not None and size != '':
-            appinfo.set(cons.FIELD_SIZE, size)
+        rankus.save()
 
-        if offered is not None and offered != '':
-            appinfo.set(cons.FIELD_OFFERED, offered)
-
-        if installs is not None and installs != '':
-            appinfo.set(cons.FIELD_INSTALLS, installs)
-
-        if android is not None and android != '':
-            appinfo.set(cons.FIELD_ANDROID, android)
-
-        appinfo.save()
-
-        return appinfo
+        return rankus
 
     def query(self):
-        query = self.AppInfo.query
+        query = self.RankUS.query
         query.select(cons.FIELD_PACKAGE)
         query.limit(20)
         query.skip(200)
