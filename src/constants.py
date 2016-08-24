@@ -1,7 +1,7 @@
 #-*_coding:utf8-*-
 
 # AppInfo
-FORM_NAME = 'AppInfo'
+FORM_APPINFO = 'AppInfo'
 FIELD_PACKAGE = 'package'
 FIELD_NAME = 'name'
 FIELD_CATEGORY = 'category'
@@ -12,6 +12,7 @@ FIELD_OFFERED = 'offered'
 FIELD_ANDROID = 'android'
 
 # Rank
+FORM_RANK_US = 'RankUS'
 KEY_RANK = 'rank'
 KEY_RANK_TYPE = 'rank_type'  # 0 = free, 1 = paid, 2 = new
 VALUE_RANK_TYPE_FREE = 0

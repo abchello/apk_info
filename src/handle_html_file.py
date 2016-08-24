@@ -1,7 +1,7 @@
 #-*_coding:utf8-*-
 import inspect
 import os
-import shutil
+from datetime import datetime
 from bs4 import BeautifulSoup
 import file_utils as fu
 import constants as cons
@@ -171,9 +171,10 @@ def explain_html(path):
     tag = get_chart_info_tag(soup);
     country = get_chart_info_country(tag)
     date = get_chart_info_date(tag)
-    print(country)
+    print(get_country(country))
     print(date)
 
+    return
     fu.get_print_file_path((country.join(date)))
 
     dictlist_1 = []
@@ -233,15 +234,12 @@ def explain_html(path):
 
 
 
-        print('count :', count)
-        print('column :', column + 1)
+            print('count :', count)
+            print('column :', column + 1)
 
-        count += 1
-        sep = '##'
-        # print('----#' + str(count) + sep + app_name + sep + app_package + sep + app_publisher)
-        print('---#' + str(count) + str(app_info_dict))
-
-    return
+            count += 1
+            print('---#' + str(count) + str(app_info_dict))
+        print('dictlist_5 length is :', len(dictlist_5))
 
     # init the list of write to file
     write_to_file_list.append(dictlist_1)
@@ -249,6 +247,29 @@ def explain_html(path):
     write_to_file_list.append(dictlist_3)
     write_to_file_list.append(dictlist_4)
     write_to_file_list.append(dictlist_5)
+
+    return write_to_file_list
+
+def get_country(country_str):
+    country = cons.VALUE_NULL
+
+    if country_str is not None and country_str is not '':
+        US_TAG = 'United States'
+        if US_TAG in country_str:
+            country = cons.FORM_RANK_US
+
+    return country
+
+    return cons.FORM_RANK_US
+
+def get_datetime(time_str):
+    # d_1 = datetime.date(2016, 9, 16)
+    d1 = datetime(2008, 3, 29)
+    d = datetime.now().timetuple()
+    print(d)
+    print(d1.date())
+
+def write_to_file(write_to_file_list):
 
     for i in range(len(write_to_file_list)):
         # write the dict to file
@@ -259,15 +280,14 @@ def explain_html(path):
             print('write-->line:', line)
             path = fu.get_out_file_path(str(i))
             fu.write_text(path, line)
+    return
 
 
-    print('------- END --------')
-    print('dictlist_1 length is :', len(dictlist_1))
-    print('dictlist_5 length is :', len(dictlist_5))
 
     # print(soup.td)
 
     # print(soup.td.contents)
 # fu.clean()
 # fu.create_out_dir()
-explain_html(get_file_path())
+# explain_html(get_file_path())
+get_datetime('Aug 17, 2016 2:00am UTC-7')

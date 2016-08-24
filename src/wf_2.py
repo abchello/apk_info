@@ -1,10 +1,6 @@
 #-*_coding:utf8-*-
 import db.db_appinfo as afh
 import constants as cons
-import leancloud
-
-class AppInfo(leancloud.Object):
-    pass
 
 def do():
     db_helper = afh.AppInfoHelper()
