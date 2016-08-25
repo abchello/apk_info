@@ -2,7 +2,7 @@
 import file_utils as fu
 import os
 import get_info_from_gp as ai
-import db.db_appinfo as afh
+import db.dbhelper as afh
 import pprint
 
 CSV_SEP = '#'

@@ -1,5 +1,5 @@
 #-*_coding:utf8-*-
-import db.db_appinfo as afh
+import db.dbhelper as afh
 import constants as cons
 
 def do():

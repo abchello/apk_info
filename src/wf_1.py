@@ -1,5 +1,5 @@
 #-*_coding:utf8-*-
-import db.db_appinfo as afh
+import db.dbhelper as afh
 
 from datetime import datetime
 

@@ -7,6 +7,9 @@ import file_utils as fu
 import constants as cons
 from datetime import datetime
 
+RANK_DATE = datetime(2008, 3, 29)
+
+
 #Get test file path
 def get_file_path():
 
@@ -174,7 +177,6 @@ def explain_html(path):
     print(get_country(country))
     print(date)
 
-    return
     fu.get_print_file_path((country.join(date)))
 
     dictlist_1 = []
@@ -183,7 +185,6 @@ def explain_html(path):
     dictlist_4 = []  # [dict, dict, dict]
     dictlist_5 = []  # [dict, dict, dict]
     write_to_file_list = []  # [list, list, list]
-    rank = 1
     count = 0
     for tag_td in soup.find_all('td'):
         print('find a tag = td')
@@ -204,31 +205,31 @@ def explain_html(path):
             if column == 0:
                 rank = len(dictlist_1) + 1
                 app_info_dict = gentlate_rank_dict(app_package, rank,
-                                                    cons.VALUE_RANK_TYPE_FREE, datetime(2016, 8, 1),
+                                                    cons.VALUE_RANK_TYPE_FREE, RANK_DATE,
                                                     app_name, app_publisher)
                 dictlist_1.append(app_info_dict)
             elif column == 1:
                 rank = len(dictlist_2) + 1
                 app_info_dict = gentlate_rank_dict(app_package, rank,
-                                                   cons.VALUE_RANK_TYPE_PAID, datetime(2016, 8, 1),
+                                                   cons.VALUE_RANK_TYPE_PAID, RANK_DATE,
                                                    app_name, app_publisher)
                 dictlist_2.append(app_info_dict)
             elif column == 2:
                 rank = len(dictlist_3) + 1
                 app_info_dict = gentlate_rank_dict(app_package, rank,
-                                                   cons.VALUE_RANK_TYPE_GROSSING, datetime(2016, 8, 1),
+                                                   cons.VALUE_RANK_TYPE_GROSSING, RANK_DATE,
                                                    app_name, app_publisher)
                 dictlist_3.append(app_info_dict)
             elif column == 3:
                 rank = len(dictlist_4) + 1
                 app_info_dict = gentlate_rank_dict(app_package, rank,
-                                                   cons.VALUE_RANK_TYPE_NEWFREE, datetime(2016, 8, 1),
+                                                   cons.VALUE_RANK_TYPE_NEWFREE, RANK_DATE,
                                                    app_name, app_publisher)
                 dictlist_4.append(app_info_dict)
             elif column == 4:
                 rank = len(dictlist_5) + 1
                 app_info_dict = gentlate_rank_dict(app_package, rank,
-                                                   cons.VALUE_RANK_TYPE_NEWPAID, datetime(2016, 8, 1),
+                                                   cons.VALUE_RANK_TYPE_NEWPAID, RANK_DATE,
                                                    app_name, app_publisher)
                 dictlist_5.append(app_info_dict)
 
@@ -268,6 +269,7 @@ def get_datetime(time_str):
     d = datetime.now().timetuple()
     print(d)
     print(d1.date())
+    return RANK_DATE
 
 def write_to_file(write_to_file_list):
 
@@ -276,7 +278,7 @@ def write_to_file(write_to_file_list):
         list = write_to_file_list[i]
         for s_dict in list:
             # line = dict_to_str(s_dict)
-            line = s_dict[cons.FIELD_PACKAGE]
+            line = str(s_dict[cons.KEY_RANK]) + '#' + s_dict[cons.FIELD_PACKAGE]
             print('write-->line:', line)
             path = fu.get_out_file_path(str(i))
             fu.write_text(path, line)
@@ -289,5 +291,5 @@ def write_to_file(write_to_file_list):
     # print(soup.td.contents)
 # fu.clean()
 # fu.create_out_dir()
-# explain_html(get_file_path())
-get_datetime('Aug 17, 2016 2:00am UTC-7')
+# write_to_file(explain_html(get_file_path()))
+# get_datetime('Aug 17, 2016 2:00am UTC-7')
