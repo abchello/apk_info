@@ -2,18 +2,17 @@ import leancloud
 import cfg
 import constants as cons
 
+
 # class AppInfo(leancloud.Object):
 #     pass
 
 class DBBase(object):
-
     def initialize_sdk(self):
         leancloud.init(cfg.get_app_id(), cfg.get_app_key())
         print('DBBase init() -- called')
 
+
 class AppInfoHelper(DBBase):
-
-
     # AppInfo = leancloud.Object.extend(FORM_NAME)
 
     def __init__(self):
@@ -26,9 +25,10 @@ class AppInfoHelper(DBBase):
 
     def and_or_update_by(self, dect):
         return self.add_or_update(dect[cons.FIELD_PACKAGE], dect[cons.FIELD_NAME],
-                           dect[cons.FIELD_CATEGORY], dect[cons.FIELD_SIZE],
-                           dect[cons.FIELD_PRICE], dect[cons.FIELD_INSTALLS],
-                           dect[cons.FIELD_OFFERED], dect[cons.FIELD_ANDROID])
+                                  dect[cons.FIELD_CATEGORY], dect[cons.FIELD_SIZE],
+                                  dect[cons.FIELD_PRICE], dect[cons.FIELD_INSTALLS],
+                                  dect[cons.FIELD_OFFERED], dect[cons.FIELD_ANDROID])
+
     def update_value(self, id, key, value):
 
         appinfo = self.AppInfo.create_without_data(id)
@@ -82,34 +82,29 @@ class AppInfoHelper(DBBase):
 
         return query_list
 
-class RankUSHelper(DBBase):
 
+class RankUSHelper(DBBase):
     def __init__(self):
         super().initialize_sdk()
         self.RankUS = leancloud.Object.extend(cons.FORM_RANK_US)
         print('AppInfoHelper init() --called')
 
-    def and_or_update_by(self, dect):
-        return self.add_or_update(dect[cons.FIELD_PACKAGE], dect[cons.KEY_RANK],
-                           dect[cons.KEY_RANK_TYPE], dect[cons.KEY_DATE])
+    def add_by(self, dect):
+        return self.add(dect[cons.FIELD_PACKAGE], dect[cons.KEY_RANK],
+                        dect[cons.KEY_RANK_TYPE], dect[cons.KEY_DATE])
+
     def update_value(self, id, key, value):
 
         appinfo = self.RankUS.create_without_data(id)
         appinfo.set(key, value)
         appinfo.save()
 
-    def add_or_update(self, package, rank, rank_type, date):
-        rankus = None
-        query = self.RankUS.query
-        query_list = query.equal_to(cons.FIELD_PACKAGE, package).find()
-        if len(query_list) > 0:
-            id = query_list[0].id
-            rankus = self.RankUS.create_without_data(id)
-            print('update ID-->', id)
-        else:
-            rankus = self.RankUS()
-            rankus.set(cons.FIELD_PACKAGE, package)
-            print('add    ID-->', rankus.id)
+    def add(self, package, rank, rank_type, date):
+        rankus = self.RankUS()
+        rankus.set(cons.FIELD_PACKAGE, trim_package(package))
+        if package is None or package == '' or package == cons.VALUE_NULL:
+            print('add fail:package is NULL')
+            return
 
         # rank value is int
         rankus.set(cons.KEY_RANK, rank)
@@ -122,6 +117,7 @@ class RankUSHelper(DBBase):
             rankus.set(cons.KEY_DATE, date)
 
         rankus.save()
+        print('add an item')
 
         return rankus
 
@@ -136,6 +132,8 @@ class RankUSHelper(DBBase):
 
 
 RETURN_STR = '\n'
+
+
 def trim_package(package):
     # delete start and end whitespace
     package = package.strip()
@@ -145,4 +143,3 @@ def trim_package(package):
     package = package.replace(' ', '')
     print(package)
     return package
-

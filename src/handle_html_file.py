@@ -1,4 +1,4 @@
-#-*_coding:utf8-*-
+# -*_coding:utf8-*-
 import inspect
 import os
 from datetime import datetime
@@ -7,12 +7,13 @@ import file_utils as fu
 import constants as cons
 from datetime import datetime
 
-RANK_DATE = datetime(2008, 3, 29)
+RANK_DATE = datetime(2016, 8, 1)
+SEP = '#'
+OUT_FNAME = ''
 
 
-#Get test file path
+# Get test file path
 def get_file_path():
-
     test_file_path = ''
 
     # the test dirs
@@ -46,8 +47,7 @@ def get_chart_info_tag(soup):
 
 
 def get_chart_info_country(tag_h3):
-
-    country = 'UNKNOWN_COUNTRY'
+    country = cons.VALUE_NULL
     # print(tag_h3)
 
     if tag_h3 is not None:
@@ -56,9 +56,9 @@ def get_chart_info_country(tag_h3):
             country = s
     return country
 
-def get_chart_info_date(tag):
 
-    date = 'UNKNOWN_DATE'
+def get_chart_info_date(tag):
+    date = cons.VALUE_NULL
 
     if tag is not None:
         span = tag.span
@@ -76,9 +76,10 @@ def gentlate_rank_dict(package, rank, rank_type, date, name, publisher=''):
             cons.KEY_RANK_TYPE: rank_type, cons.KEY_DATE: date,
             cons.FIELD_NAME: name, cons.FIELD_OFFERED: publisher}
 
+
 def get_app_name_from_div_tag(div):
     # Default value
-    info_app_name = 'NULL_APP_NAME'
+    info_app_name = cons.VALUE_NULL
     if div is None:
         return info_app_name
 
@@ -100,9 +101,10 @@ def get_app_name_from_div_tag(div):
     print('find the app name      :' + info_app_name)
     return info_app_name
 
+
 def get_app_publisher_from_div_tag(div):
     # default value
-    info_app_publisher = 'NULL_APP_PUBLISHER'
+    info_app_publisher = cons.VALUE_NULL
     if div == None:
         return info_app_publisher
 
@@ -126,7 +128,7 @@ def get_app_publisher_from_div_tag(div):
 
 def get_app_package_from_div_tag(div):
     # Default value
-    info_app_package = 'NULL_APP_PACKAGE'
+    info_app_package = cons.VALUE_NULL
 
     if div is None:
         return info_app_package
@@ -145,19 +147,21 @@ def get_app_package_from_div_tag(div):
     return info_app_package
 
     # for tag_div in tag_td.find_all('div'):
-        # print('find a tag = div')
-        # use method 'join' to delete the '[]' for the reason that using the 'find_all' method get string will get the last eletment call the str() and append the string '[]'
-        # print('find a tag class is ', ''.join(tag_div['class']))
-        # print(tag_div.attrs)
-        # print(tag_div.find('span', attrs={'class': 'title-info-wrapper'}))
-        # class_value = ''.join(tag_div['class'])
-        # if class_value == 'main-info':
-        #     print('find a main info')
+    # print('find a tag = div')
+    # use method 'join' to delete the '[]' for the reason that using the 'find_all' method get string will get the last eletment call the str() and append the string '[]'
+    # print('find a tag class is ', ''.join(tag_div['class']))
+    # print(tag_div.attrs)
+    # print(tag_div.find('span', attrs={'class': 'title-info-wrapper'}))
+    # class_value = ''.join(tag_div['class'])
+    # if class_value == 'main-info':
+    #     print('find a main info')
+
 
 def dict_to_str(dict):
     sep = '#'
     str = '' + dict[cons.FIELD_NAME] + sep + dict[cons.FIELD_PACKAGE] + sep + dict[cons.FIELD_OFFERED]
     return str
+
 
 def get_data(data_str):
     date = datetime.today()
@@ -198,15 +202,15 @@ def explain_html(path):
 
         app_publisher = get_app_publisher_from_div_tag(tag_td_div_main_info)
 
-        if len(dictlist_1) == 0 and app_package == 'NULL_APP_PACKAGE':
-            print('Null td')
+        if len(dictlist_1) == 0 and app_package == cons.VALUE_NULL:
+            print(cons.VALUE_NULL)
         else:
             column = count % 5
             if column == 0:
                 rank = len(dictlist_1) + 1
                 app_info_dict = gentlate_rank_dict(app_package, rank,
-                                                    cons.VALUE_RANK_TYPE_FREE, RANK_DATE,
-                                                    app_name, app_publisher)
+                                                   cons.VALUE_RANK_TYPE_FREE, RANK_DATE,
+                                                   app_name, app_publisher)
                 dictlist_1.append(app_info_dict)
             elif column == 1:
                 rank = len(dictlist_2) + 1
@@ -233,8 +237,6 @@ def explain_html(path):
                                                    app_name, app_publisher)
                 dictlist_5.append(app_info_dict)
 
-
-
             print('count :', count)
             print('column :', column + 1)
 
@@ -251,6 +253,7 @@ def explain_html(path):
 
     return write_to_file_list
 
+
 def get_country(country_str):
     country = cons.VALUE_NULL
 
@@ -261,7 +264,6 @@ def get_country(country_str):
 
     return country
 
-    return cons.FORM_RANK_US
 
 def get_datetime(time_str):
     # d_1 = datetime.date(2016, 9, 16)
@@ -271,14 +273,14 @@ def get_datetime(time_str):
     print(d1.date())
     return RANK_DATE
 
-def write_to_file(write_to_file_list):
 
+def write_to_file(write_to_file_list):
     for i in range(len(write_to_file_list)):
         # write the dict to file
         list = write_to_file_list[i]
         for s_dict in list:
             # line = dict_to_str(s_dict)
-            line = str(s_dict[cons.KEY_RANK]) + '#' + s_dict[cons.FIELD_PACKAGE]
+            line = str(s_dict[cons.KEY_RANK]) + SEP + s_dict[cons.FIELD_NAME] + '#' + s_dict[cons.FIELD_PACKAGE]
             print('write-->line:', line)
             path = fu.get_out_file_path(str(i))
             fu.write_text(path, line)
@@ -289,7 +291,7 @@ def write_to_file(write_to_file_list):
     # print(soup.td)
 
     # print(soup.td.contents)
-# fu.clean()
-# fu.create_out_dir()
-# write_to_file(explain_html(get_file_path()))
-# get_datetime('Aug 17, 2016 2:00am UTC-7')
+    # fu.clean()
+    # fu.create_out_dir()
+    # write_to_file(explain_html(get_file_path()))
+    # get_datetime('Aug 17, 2016 2:00am UTC-7')
